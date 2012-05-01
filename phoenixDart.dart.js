@@ -4316,6 +4316,7 @@ function Phoenix(canvas) {
   Util.initializeIntList(this.gameControl);
   Util.initializeBoolList(this.desiredGameControlForNextLoop);
   this.framesPerSecond = (0.0);
+  this.initSFX();
 }
 Phoenix.prototype.pokeb = function(addr, newByte) {
   addr &= (65535);
@@ -4341,6 +4342,9 @@ Phoenix.prototype.pokeb = function(addr, newByte) {
     if (this.peekb(addr) != newByte) {
       this.mem.$setindex(addr, newByte);
       if (!this.isMute()) {
+        if (newByte == (143)) this.explosionSFX.play();
+        if ((newByte > (101)) && (newByte < (107))) this.play(this.laserSFX);
+        if (newByte == (80)) this.blowSFX.play();
       }
     }
   }
@@ -4348,6 +4352,8 @@ Phoenix.prototype.pokeb = function(addr, newByte) {
     if (this.peekb(addr) != newByte) {
       this.mem.$setindex(addr, newByte);
       if (!this.isMute()) {
+        if (newByte == (12)) this.shieldSFX.play();
+        if (newByte == (2)) this.hitSFX.play();
       }
     }
   }
@@ -4394,6 +4400,27 @@ Phoenix.prototype.peekw = function(addr) {
   var t = this.peekb(addr);
   addr++;
   return t | (this.peekb(addr) << (8));
+}
+Phoenix.prototype.initSFX = function() {
+  this.laserSFX = this.loadSFX("laser");
+  this.explosionSFX = this.loadSFX("explo");
+  this.blowSFX = this.loadSFX("blow");
+  this.shieldSFX = this.loadSFX("shield");
+  this.hitSFX = this.loadSFX("hit");
+}
+Phoenix.prototype.play = function(el) {
+  var _s = el.src;
+  el.src = null;
+  el.src = _s;
+  el.play();
+}
+Phoenix.prototype.loadSFX = function(name) {
+  var sfx = _ElementFactoryProvider.Element$tag$factory("audio");
+  sfx.src = ("" + name + ".ogg");
+  get$$document().query("#canvas-content").get$nodes().add(sfx);
+  print$(("read " + name + ".ogg"));
+  sfx.load();
+  return sfx;
 }
 Phoenix.prototype.loadRoms = function(buffer) {
   for (var i = (0);

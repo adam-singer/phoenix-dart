@@ -181,6 +181,8 @@ Phoenix memory map
   CanvasElement backCanvas;
   CanvasElement frontCanvas;
   bool scrollRefresh;
+  AudioElement laserSFX, explosionSFX, blowSFX, shieldSFX, hitSFX;
+
 
   // Phoenix runs at 0.74 Mhz (?)
   Phoenix(CanvasElement canvas) : super(0.74) {
@@ -205,6 +207,7 @@ Phoenix memory map
     Util.initializeIntList(gameControl);
     Util.initializeBoolList(desiredGameControlForNextLoop);
     this.framesPerSecond=0.0;
+    initSFX();
   }        
  
 
@@ -241,10 +244,10 @@ Phoenix memory map
                 mem[addr] = newByte;
                 // sound.updateControlA((byte)newByte);
                 if (!isMute()) {
-/* SOUND SUPPORT                    if ( newByte==143 ) explosionSFX.play ();
-                    if ( (newByte>101)&&(newByte<107) ) laserSFX.play ();
-                    if ( newByte==80 ) blowSFX.play ();
-*/                }
+                  if ( newByte==143 ) explosionSFX.play ();
+                  if ( (newByte>101)&&(newByte<107) ) play(laserSFX);
+                  if ( newByte==80 ) blowSFX.play ();
+                }
                 // canvasGraphics.setFocus(true);
             }
         }
@@ -254,9 +257,9 @@ Phoenix memory map
                 mem[ addr ] = newByte;
                 // sound.updateControlB((byte) newByte);
                 if (!isMute()){
-/* SOUND SUPPORT                   if ( newByte==12 ) shieldSFX.play ();
-                    if ( newByte==2 ) hitSFX.play ();
-*/                }
+                  if ( newByte==12 ) shieldSFX.play ();
+                  if ( newByte==2 ) hitSFX.play ();
+                }
                 // canvasGraphics.setFocus(true);
             }
         }
@@ -324,9 +327,7 @@ Phoenix memory map
         return t | (peekb( addr ) << 8);
     }
 
-/*    
     void initSFX() {
-        soundController = new SoundController();
         this.laserSFX = loadSFX("laser"); 
         this.explosionSFX = loadSFX("explo");
         this.blowSFX = loadSFX("blow");
@@ -335,22 +336,22 @@ Phoenix memory map
     }
 
 
-    Sound loadSFX(String name) {
-        Sound sfx = soundController.createSound(Sound.MIME_TYPE_AUDIO_OGG_VORBIS, name+".ogg");
-        sfx.play();
-        if (LoadState.LOAD_STATE_NOT_SUPPORTED == sfx.getLoadState()){
-            sfx = soundController.createSound(Sound.MIME_TYPE_AUDIO_MPEG_MP3, name+".mp3");
-            sfx.play();
-            if (LoadState.LOAD_STATE_NOT_SUPPORTED == sfx.getLoadState()){
-                sfx = soundController.createSound(Sound.MIME_TYPE_AUDIO_WAV_PCM, name+".wav");
-                sfx.play();
-            }
-        }
-        System.out.println("Loaded "+sfx.getMimeType()+", "+sfx.getSoundType()+", "+sfx.getLoadState());
-        return sfx;
+    void play(AudioElement el) {
+      // to avoid a bug in Chrome where the sound could only be played once:
+      String _s=el.src;
+      el.src=null;
+      el.src=_s;
+      el.play();
     }
-
-*/
+    
+    AudioElement loadSFX(String name) {
+      AudioElement sfx = new Element.tag("audio");
+      sfx.src="${name}.ogg";
+      document.query("#canvas-content").nodes.add(sfx);
+      print("read ${name}.ogg");
+      sfx.load();
+      return sfx;
+    }
     
     /** 
      * 0x0000 - 0x3FFF: Program ROM
