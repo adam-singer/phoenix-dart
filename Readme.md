@@ -3,7 +3,7 @@ Phoenix Arcade Emulator in Dart
 
 See it running [here](http://mangini.github.com/phoenix-dart/)
 
-Dart port by Renato Mangini (mangini@gmail.com) based on [GWT-Phoenix](http://gwt-phoenix.appspot.com)
+Dart port by [me](http://github.com/mangini) based on [GWT-Phoenix](http://gwt-phoenix.appspot.com)
 
 
 About the code
@@ -16,7 +16,7 @@ About the code
 About the license:
 ------------------
 As stated above, this is the result of a few hours hacking in a hackathon. I grabbed the GWT-Phoenix code with permission of the author and ported it to the Dart language. With these considerations, the summary of licensing is:
-* All of my changes (the porting itself) is Apache-licensed
+* All of my changes (the porting itself) is [Apache-licensed](http://www.apache.org/licenses/LICENSE-2.0.txt)
 * For the licensing of the GWT-version, including the logical components of the code, please contact [the author](http://github.com/muriloq)
-* The first version of this code (a Java applet) dates back in 1995. Almost no information could be found about the IP of its parts - specially the game ROM. Please, if you owns or believe this code hurts any intellectual property, contact me as soon as possible.
+* The first version of this code (a Java applet) dates back to 1995. Almost no information could be found about the IP of its parts - specially the game ROM. Please, if you own or believe this code hurts any intellectual property, contact me as soon as possible.
 
