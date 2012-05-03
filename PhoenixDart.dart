@@ -1,4 +1,5 @@
 #import('dart:html');
+#import('dart:dom', prefix:'dom');
 #source('Phoenix.dart');
 #source("i8080.dart");
 #source("Color.dart");
@@ -86,7 +87,7 @@ class PhoenixDart {
     req.open('GET', "fullprogram.rom", true);
     req.responseType="arraybuffer";
     print("loading rom...");
-    req.$dom_addEventListener('load', (e) {
+    req.addEventListener('load', (e) {
       var arrayview=new Uint8Array.fromBuffer(req.response);
       print("rom loaded: ${arrayview.length} unsigned bytes");
       phoenix = new Phoenix(initializeCanvas());
